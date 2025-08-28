@@ -1,0 +1,6 @@
+@NK.OidcServer_HostAddress = http://localhost:5242
+
+GET {{NK.OidcServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
