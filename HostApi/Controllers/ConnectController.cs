@@ -1,6 +1,7 @@
 ﻿using Core.Models;
 using Core.Services;
 using HostApi.Controllers.Requests;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,18 +19,31 @@ namespace HostApi.Controllers
 
         // GET /connect/authorize
         [HttpGet("authorize")]
-        [Authorize] // Cookie等でログイン必須
+        [AllowAnonymous]
         public async Task<IActionResult> Authorize([FromQuery] AuthorizeQuery q, CancellationToken ct)
         {
             var req = new AuthorizeRequest(
                 q.response_type, q.client_id, q.redirect_uri, q.scope,
                 q.state, q.code_challenge, q.code_challenge_method, q.nonce
-            );
+            );s
 
             var outcome = await _authz.AuthorizeAsync(req, User, HttpContext.Session?.Id, ct);
             return outcome switch
             {
+                // 認可コード発行 → クライアントへ
                 RedirectOutcome r => Redirect(r.RedirectUri),
+
+                // 👇 AuthorizationService が「未ログイン」と判断（login_required）した場合の処理
+                // Cookie 認証を使ってるなら Challenge で LoginPath に飛ぶ（returnUrl を現在URLに設定）
+                ErrorOutcome { Error: "login_required" } => Challenge(
+                    new AuthenticationProperties
+                    {
+                        RedirectUri = Microsoft.AspNetCore.Http.Extensions.UriHelper.GetDisplayUrl(HttpContext.Request)
+                    },
+                    "Cookies" // ← クッキー認証のスキーム名
+                ),
+
+                // その他のバリデーションエラー
                 ErrorOutcome e => BadRequest(new { error = e.Error, error_description = e.Description }),
                 _ => BadRequest(new { error = "invalid_request" })
             };

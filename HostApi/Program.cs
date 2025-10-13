@@ -10,9 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSession(o =>
+{
+    o.Cookie.Name = ".oidc.sid";
+    o.IdleTimeout = TimeSpan.FromHours(8);
+    o.Cookie.HttpOnly = true;
+    o.Cookie.SecurePolicy = CookieSecurePolicy.Always; // dev‚È‚ç None ‚Å‚àOK
+});
 builder.Services.AddOidcServerCore(opt =>
 {
     opt.Issuer = "https://issuer.example.com";
@@ -41,8 +48,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseRouting();
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
