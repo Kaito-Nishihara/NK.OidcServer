@@ -1,11 +1,11 @@
 ﻿using Core.Models;
 using Core.Services;
-using HostApi.Controllers.Requests;
+using HostApp.Controllers.Requests;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HostApi.Controllers
+namespace HostApp.Controllers
 {
     [ApiController]
     [Route("connect")]
