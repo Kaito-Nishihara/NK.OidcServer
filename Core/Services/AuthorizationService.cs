@@ -13,7 +13,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Core.Services;
-public sealed class AuthorizationService
+
+public interface IAuthorizationService
+{
+    Task<AuthorizeOutcome> AuthorizeAsync(AuthorizeRequest req, ClaimsPrincipal user, string? sessionId, CancellationToken ct = default);
+}
+
+public sealed class AuthorizationService: IAuthorizationService
 {
     private readonly IClientStore _clients;
     private readonly IAuthorizationCodeStore _codes;

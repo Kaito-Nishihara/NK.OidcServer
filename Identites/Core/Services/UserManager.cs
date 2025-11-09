@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Identites.Core.Services
-{
+{    
     public sealed class UserManager<TUser, TKey>
      where TUser : class, IAuthUser<TKey>
     {

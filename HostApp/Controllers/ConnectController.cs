@@ -13,9 +13,18 @@ namespace HostApp.Controllers
     {
         private readonly AuthorizationService _authz;
         private readonly TokenService _tokens;
+        private readonly SignInManager
 
         public ConnectController(AuthorizationService authz, TokenService tokens)
         { _authz = authz; _tokens = tokens; }
+
+        [HttpGet("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request,  CancellationToken ct)
+        {
+            // This is a placeholder for the login action.
+            // Implement your login logic here.
+            return Ok("Login action");
+        }
 
         // GET /connect/authorize
         [HttpGet("authorize")]
