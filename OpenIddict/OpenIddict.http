@@ -1,0 +1,6 @@
+@OpenIddict_HostAddress = http://localhost:5268
+
+GET {{OpenIddict_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

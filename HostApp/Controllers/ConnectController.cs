@@ -1,6 +1,7 @@
 ﻿using Core.Models;
 using Core.Services;
 using HostApp.Controllers.Requests;
+using Identites.Core.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ namespace HostApp.Controllers
     {
         private readonly AuthorizationService _authz;
         private readonly TokenService _tokens;
-        private readonly SignInManager
+        private readonly SignInManager _signInManager;
 
         public ConnectController(AuthorizationService authz, TokenService tokens)
         { _authz = authz; _tokens = tokens; }
